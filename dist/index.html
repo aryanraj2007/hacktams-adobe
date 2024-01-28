@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="Get started with Add-on development using JavaScript" />
+        <meta name="keywords" content="Adobe, Express, Add-On, JavaScript" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>QR-Code Generator</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Single+Day&display=swap" rel="stylesheet">
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <link rel="stylesheet" href="style.css">
+        
+    </head>
+    <body>
+
+        <style>
+            body{
+                font-family: 'Single Day', cursive;
+                padding: .5%;
+            }
+            div{
+                margin: 1%;
+            }
+            .qr-code{
+                padding: 2%;
+            }
+            .content{
+                
+                margin: auto;
+                padding: 10px;
+
+            }
+        </style>
+
+        <div class = 'content'>
+            <div class="input">
+                <h1><b>QR-code</b></h1>
+                <br>
+                <input id="URL" placeholder="www.mlh.com" class="form-contol" onkeyup="document.getElementById('IMG').setAttribute('src', `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${document.getElementById('URL').value}` )" onkeypress="makeDraggableUsingUrl('IMG',  `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${document.getElementById('URL').value}`);"></input><br><br>
+            </div>
+    
+            <div id="qr-code">
+                <img id = "IMG" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=00" alt=""></img>
+            </div>
+
+            <br><br>
+            <div class="about">
+                <h3>
+                     <em>How To Use</em>
+                </h3>
+                <p>
+                      Qr-Code is an adobe express addon that allows you to generate a qr-code instantly. It has a multitude of aplications, and can be particulary helpful for graphic designers and advertisers that need to share links/information with people as it allows them to create a qr code directly in express. 
+                </p>
+                <p>
+                    In order to get the qr code on your canvas, you need to copy and paste it from the addon to the canvas
+                </p>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+        <script>
+            import addOnUISdk from "https://new.express.adobe.com/static/add-on-sdk/sdk.js";
+
+            export function enableDragOnElement() {
+                const element = $("#qr-code").children("img")[0];
+                const elementBlob = dataURLtoBlob(element.src);
+                AddOnStore.ready.then(() => {
+                    AddOnStore.app.enableDragToDocument(element, { previewCallback: (element) => {return new URL(element.src)}, completionCallback: (element) => { return Promise.resolve([{blob: elementBlob}]) } });
+                });
+            }
+
+        </script>
+        
+    </body>
+</html>
+
